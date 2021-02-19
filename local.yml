@@ -12,7 +12,7 @@ services:
     image: typediea_local_django
     container_name: typeidea_django
     depends_on:
-      - typeidea_postgres
+      - postgres
     volumes:
       - .:/app:z
     env_file:
