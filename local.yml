@@ -10,9 +10,9 @@ services:
       context: .
       dockerfile: ./compose/local/django/Dockerfile
     image: typediea_local_django
-    container_name: django
+    container_name: typeidea_django
     depends_on:
-      - postgres
+      - typeidea_postgres
     volumes:
       - .:/app:z
     env_file:
@@ -27,25 +27,9 @@ services:
       context: .
       dockerfile: ./compose/production/postgres/Dockerfile
     image: typediea_production_postgres
-    container_name: postgres
+    container_name: typeidea_postgres
     volumes:
       - local_postgres_data:/var/lib/postgresql/data:Z
       - local_postgres_data_backups:/backups:z
     env_file:
       - ./.envs/.local/.postgres
-
-  docs:
-    image: typediea_local_docs
-    container_name: docs
-    build:
-      context: .
-      dockerfile: ./compose/local/docs/Dockerfile
-    env_file:
-      - ./.envs/.local/.django
-    volumes:
-      - ./docs:/docs:z
-      - ./config:/app/config:z
-      - ./typediea:/app/typediea:z
-    ports:
-      - "7000:7000"
-    command: /start-docs
