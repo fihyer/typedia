@@ -3,7 +3,8 @@ FROM python:3.8-slim-buster
 ENV PYTHONUNBUFFERED 1
 ENV PYTHONDONTWRITEBYTECODE 1
 
-RUN apt-get update \
+RUN echo "deb https://mirrors.aliyun.com/debian/ buster main non-free contrib" > /etc/apt/sources.list
+RUN apt-get clean && apt-get update \
   # dependencies for building Python packages
   && apt-get install -y build-essential \
   # psycopg2 dependencies
@@ -16,7 +17,8 @@ RUN apt-get update \
 
 # Requirements are installed here to ensure they will be cached.
 COPY ./requirements /requirements
-RUN pip install -r /requirements/local.txt
+RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple pip
+RUN pip install -i https://pypi.tuna.tsinghua.edu.cn/simple -r /requirements/local.txt
 
 COPY ./compose/production/django/entrypoint /entrypoint
 RUN sed -i 's/\r$//g' /entrypoint
